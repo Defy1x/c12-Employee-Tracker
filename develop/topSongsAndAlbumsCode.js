@@ -1,18 +1,13 @@
 const mysql = require('mysql');
 const inquirer = require('inquirer');
+const { username, password } = require("./config");
 
 const connection = mysql.createConnection({
-  host: 'localhost',
-
-  // Your port; if not 3306
+  host: "localhost",
   port: 3306,
-
-  // Your username
-  user: 'root',
-
-  // Be sure to update with your own MySQL password!
-  password: '',
-  database: 'top_songsDB',
+  user: username,
+  password: password,
+  database: "top_songsDB",
 });
 
 connection.connect((err) => {
