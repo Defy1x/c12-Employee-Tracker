@@ -75,7 +75,7 @@ Bonus points if you're able to:
 Please add your user name and password to the config file. Also install npm packages needed to run this program.
 
 #Link
-Video coming soon
+Video coming soon.
 
 #Usage
 ## Final screenshot
