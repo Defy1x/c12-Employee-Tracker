@@ -15,49 +15,6 @@ connection.connect((err) => {
   init();
 });
 
-const init = () => {
-  inquirer
-    .prompt({
-      name: 'action',
-      type: 'rawlist',
-      message: 'Please select one of the following options:',
-      choices: [
-        'Add department, role, or employee',
-        'View departments, roles, or employees',
-        'Update employee roles',
-        'Delete departments, roles, and employees',
-        'Quit Application',
-      ],
-    })
-    .then((answer) => {
-      switch (answer.action) {
-        case 'Add department, role, or employee':
-          addItem();
-          break;
-
-        case 'View departments, roles, or employees':
-          viewItem();
-          break;
-
-        case 'Delete departments, roles, and employees':
-          deleteItem();
-          break;
-
-        case 'Update employee roles':
-          updateEmployee();
-          break;
-
-        case 'Quit Application':
-          connection.end();
-          break;
-
-        default:
-          console.log("Not a valid option.");
-          break;
-       }
-    });
-  };
-
 const addItem = () => {
   inquirer
     .prompt({
@@ -245,6 +202,8 @@ const viewItem = () => {
           viewItem();
         };
 
+
+
         const viewRole = () => {
           console.log("Quering Data....")
           connection.query('SELECT * FROM role', (err, res) => {
@@ -254,6 +213,8 @@ const viewItem = () => {
           viewItem();
         };
 
+
+
         const viewEmployee = () => {
           console.log("Quering Data...")
           connection.query('SELECT * FROM employee', (err, res) => {
@@ -262,6 +223,7 @@ const viewItem = () => {
           })
           viewItem();
         };
+
 
 
 const updateEmployee = () => {
@@ -422,3 +384,46 @@ const deleteEmployee = () => {
         );
     })
 };
+
+const init = () => {
+  inquirer
+    .prompt({
+      name: 'action',
+      type: 'rawlist',
+      message: 'Please select one of the following options:',
+      choices: [
+        'Add department, role, or employee',
+        'View departments, roles, or employees',
+        'Update employee roles',
+        'Delete departments, roles, and employees',
+        'Quit Application',
+      ],
+    })
+    .then((answer) => {
+      switch (answer.action) {
+        case 'Add department, role, or employee':
+          addItem();
+          break;
+
+        case 'View departments, roles, or employees':
+          viewItem();
+          break;
+
+        case 'Delete departments, roles, and employees':
+          deleteItem();
+          break;
+
+        case 'Update employee roles':
+          updateEmployee();
+          break;
+
+        case 'Quit Application':
+          connection.end();
+          break;
+
+        default:
+          console.log("Not a valid option.");
+          break;
+       }
+    });
+  };
