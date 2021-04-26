@@ -73,12 +73,13 @@ Bonus points if you're able to:
 Please add your user name and password to the config file. Also install npm packages needed to run this program.
 
 ## Link
-Video coming soon.
+https://www.youtube.com/watch?v=vlp39msdh_4
 
 #Usage
 ## Final screenshot
 ![This is the final deployed screenshot of the node project](requirements/screenshot-01.png)
 ![This is the final deployed screenshot of the node project](requirements/screenshot-02.png)
+![This is the final deployed screenshot of the node project](requirements/screenshot-03.png)
 
 #Credits
 Thank you to everyone in the Columbia Engineering Bootcamp.
