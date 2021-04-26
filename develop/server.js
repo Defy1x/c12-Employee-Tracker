@@ -12,172 +12,413 @@ const connection = mysql.createConnection({
 
 connection.connect((err) => {
   if (err) throw err;
-  runSearch();
+  init();
 });
 
-const runSearch = () => {
+const init = () => {
   inquirer
     .prompt({
       name: 'action',
       type: 'rawlist',
-      message: 'What would you like to do?',
+      message: 'Please select one of the following options:',
       choices: [
-        'Find songs by artist',
-        'Find all artists who appear more than once',
-        'Find data within a specific range',
-        'Search for a specific song',
-        'Find artists with a top song and top album in the same year',
+        'Add department, role, or employee',
+        'View departments, roles, or employees',
+        'Update employee roles',
+        'Delete departments, roles, and employees',
+        'Quit Application',
       ],
     })
     .then((answer) => {
       switch (answer.action) {
-        case 'Find songs by artist':
-          artistSearch();
+        case 'Add department, role, or employee':
+          addItem();
           break;
 
-        case 'Find all artists who appear more than once':
-          multiSearch();
+        case 'View departments, roles, or employees':
+          viewItem();
           break;
 
-        case 'Find data within a specific range':
-          rangeSearch();
+        case 'Delete departments, roles, and employees':
+          deleteItem();
           break;
 
-        case 'Search for a specific song':
-          songSearch();
+        case 'Update employee roles':
+          updateEmployee();
           break;
 
-        case 'Find artists with a top song and top album in the same year':
-          songAndAlbumSearch();
+        case 'Quit Application':
+          connection.end();
           break;
 
         default:
-          console.log(`Invalid action: ${answer.action}`);
+          console.log("Not a valid option.");
+          break;
+       }
+    });
+  };
+
+const addItem = () => {
+  inquirer
+    .prompt({
+      name: 'action',
+      type: 'rawlist',
+      message: 'Please select an item to add:',
+      choices: [
+        'Department',
+        'Role',
+        'Employee',
+        'Return to main menu',
+      ],
+    })
+    .then((answer) => {
+      switch (answer.action) {
+        case 'Department':
+          addDepartment();
+          break;
+
+        case 'Role':
+          addRole();
+          break;
+
+        case 'Employee':
+          addEmployee();
+          break;
+
+        case 'Return to main menu':
+          init();
+          break;
+
+        default:
+          console.log('Not a valid option.');
+          break;
+      }
+    });
+  };
+
+const addDepartment = () => {
+  inquirer
+  .prompt({
+      name: 'department',
+      input: 'input',
+      message: "Enter new department's name."
+    })
+    .then((answer) => {
+      console.log('Adding new department...');
+      connection.query(
+        'INSERT INTO department SET ?',
+        {name: answer.department},
+        (err, res) => {
+          if (err) throw err;
+          console.log("Success!");
+          init();
+        })
+    })
+  };
+
+const addRole = () => {
+  inquirer
+  .prompt(
+            [
+              {
+                name: 'roleTitle',
+                input: 'input',
+                message: "Enter new role."
+              },
+              {
+              name: 'roleSalary',
+              input: 'input',
+              message: "Enter new salary."
+              },
+              {
+                name: 'roleDepartment',
+                input: 'input',
+                message: "Enter department ID."
+              },
+            ]).then((answer) => {
+            console.log('Adding new role...');
+            connection.query(
+              'INSERT INTO role SET ?',
+              {
+                title: answer.roleTitle,
+                salary: answer.roleSalary,
+                department_id: answer.roleDepartment,
+
+              },
+              (err, res) => {
+                if (err) throw err;
+                console.log('Success!');
+                init();
+              }
+            )
+          })
+        };
+
+const addEmployee = () => {
+  inquirer
+  .prompt(
+            [
+              {
+                name: 'firstName',
+                input: 'input',
+                message: "Enter new employee's first name."
+              },
+              {
+              name: 'lastName',
+              input: 'input',
+              message: "Enter new employee's last name."
+              },
+              {
+                name: 'roleID',
+                input: 'input',
+                message: "Enter new employee's ID number."
+              },
+              {
+                name: 'managerID',
+                input: 'input',
+                message: "Enter the manager ID of the new employee."
+              },
+            ]).then((answer) => {
+            console.log('Success!');
+            connection.query(
+              'INSERT INTO employee SET ?',
+              {
+                first_name: answer.firstName,
+                last_name: answer.lastName,
+                role_id: answer.roleID,
+                manager_id: answer.managerID,
+
+              },
+              (err, res) => {
+                if (err) throw err;
+                console.log('Success!');
+                init();
+              }
+            )
+        })
+  };
+
+const viewItem = () => {
+  inquirer
+    .prompt({
+      name: 'action',
+      type: 'rawlist',
+      message: 'Please select an item:',
+      choices: [
+        'Departments',
+        'Roles',
+        'Employees',
+        'Main Menu',
+      ],
+    })
+    .then((answer) => {
+      switch (answer.action) {
+        case 'Departments':
+          viewDepartment();
+          break;
+
+        case 'Roles':
+          viewRole();
+          break;
+
+        case 'Employees':
+          viewEmployee();
+          break;
+
+        case 'Main Menu':
+          init();
+          break;
+
+        default:
+          console.log("Not a valid option.");
           break;
       }
     });
 };
 
-const artistSearch = () => {
+const viewDepartment = () => {
+  console.log("Quering Data...")
+  connection.query('SELECT * FROM department', (err, res) => {
+    if (err) throw err;
+    console.table(res);
+  })
+  viewItem();
+};
+
+const viewRole = () => {
+  console.log("Quering Data....")
+  connection.query('SELECT * FROM role', (err, res) => {
+    if (err) throw err;
+    console.table(res);
+  })
+  viewItem();
+};
+
+const viewEmployee = () => {
+  console.log("Quering Data...")
+  connection.query('SELECT * FROM employee', (err, res) => {
+    if (err) throw err;
+    console.table(res);
+  })
+  viewItem();
+};
+
+
+const updateEmployee = () => {
+  inquirer
+  .prompt(
+            [
+              {
+                name: 'employeeID',
+                input: 'input',
+                message: "Enter new ID number of employee."
+              },
+              {
+              name: 'roleUpdate',
+              input: 'input',
+              message: "Enter new role ID of employee."
+              },
+            ]).then((answer) => {
+            console.log('Updating employee role...');
+            const query = connection.query(
+              'UPDATE employee SET ? WHERE ?',
+              [
+                {
+                  role_id: answer.roleUpdate
+                },
+                {
+                  id: answer.employeeID,
+                },
+              ],
+              (err, res) => {
+                if (err) throw err;
+                console.log("Success! Employee has been updated!");
+
+               init();
+            }
+        );
+    })
+};
+
+
+const deleteItem = () => {
   inquirer
     .prompt({
-      name: 'artist',
-      type: 'input',
-      message: 'What artist would you like to search for?',
+      name: 'action',
+      type: 'rawlist',
+      message: 'Please select an item to delete:',
+      choices: [
+        'Department',
+        'Role',
+        'Employee',
+        'Return to main menu',
+      ],
     })
     .then((answer) => {
-      const query = 'SELECT position, song, year FROM top5000 WHERE ?';
-      connection.query(query, { artist: answer.artist }, (err, res) => {
-        res.forEach(({ position, song, year }) => {
-          console.log(
-            `Position: ${position} || Song: ${song} || Year: ${year}`
-          );
-        });
-        runSearch();
-      });
+      switch (answer.action) {
+        case 'Department':
+          deleteDepartment();
+          break;
+
+        case 'Role':
+          deleteRole();
+          break;
+
+        case 'Employee':
+          deleteEmployee();
+          break;
+
+        case 'Return to main menu':
+          init();
+          break;
+
+        default:
+          console.log('Not a valid option.');
+          break;
+      }
     });
-};
+  };
 
-const multiSearch = () => {
-  const query =
-    'SELECT artist FROM top5000 GROUP BY artist HAVING count(*) > 1';
-  connection.query(query, (err, res) => {
-    res.forEach(({ artist }) => console.log(artist));
-    runSearch();
-  });
-};
+  const deleteDepartment = () => {
+    inquirer
+    .prompt(
+              [
+                {
+                  name: 'departmentDelete',
+                  input: 'input',
+                  message: "Enter ID of department you want to delete."
+                },
+              ]).then((answer) => {
+              console.log('Deleting department...');
+              const query = connection.query(
+                "DELETE FROM departments WHERE name = ?",
+                [
+                  {
+                    department_id: answer.departmentDelete,
+                  },
+                ],
+                (err, res) => {
+                  if (err) throw err;
+                  console.log("Success! Department has been removed.");
 
-const rangeSearch = () => {
-  inquirer
-    .prompt([
-      {
-        name: 'start',
-        type: 'input',
-        message: 'Enter starting position: ',
-        validate(value) {
-          if (isNaN(value) === false) {
-            return true;
-          }
-          return false;
-        },
-      },
-      {
-        name: 'end',
-        type: 'input',
-        message: 'Enter ending position: ',
-        validate(value) {
-          if (isNaN(value) === false) {
-            return true;
-          }
-          return false;
-        },
-      },
-    ])
-    .then((answer) => {
-      const query =
-        'SELECT position,song,artist,year FROM top5000 WHERE position BETWEEN ? AND ?';
-      connection.query(query, [answer.start, answer.end], (err, res) => {
-        res.forEach(({ position, song, artist, year }) => {
-          console.log(
-            `Position: ${position} || Song: ${song} || Artist: ${artist} || Year: ${year}`
+                 init();
+              }
           );
-        });
-        runSearch();
-      });
-    });
-};
+      })
+  };
 
-const songSearch = () => {
+  const deleteRole = () => {
+    inquirer
+    .prompt(
+              [
+                {
+                  name: 'roleDelete',
+                  input: 'input',
+                  message: "Enter ID of role you want to delete."
+                },
+              ]).then((answer) => {
+              console.log('Deleting role...');
+              const query = connection.query(
+                'DELETE FROM roles WHERE title = ?',
+                [
+                  {
+                    role_id: answer.roleDelete,
+                  },
+                ],
+                (err, res) => {
+                  if (err) throw err;
+                  console.log("Success! Role has been removed.");
+
+                 init();
+              }
+          );
+      })
+  };
+
+const deleteEmployee = () => {
   inquirer
-    .prompt({
-      name: 'song',
-      type: 'input',
-      message: 'What song would you like to look for?',
+  .prompt(
+            [
+              {
+                name: 'employeeID',
+                input: 'input',
+                message: "Enter ID number of employee you want to delete."
+              },
+            ]).then((answer) => {
+            console.log('Deleting employee...');
+            const query = connection.query(
+              'DELETE FROM employees WHERE id = ?',
+              [
+                {
+                  id: answer.employeeID,
+                },
+              ],
+              (err, res) => {
+                if (err) throw err;
+                console.log("Success! Employee has been removed.");
+
+               init();
+            }
+        );
     })
-    .then((answer) => {
-      console.log(answer.song);
-      connection.query(
-        'SELECT * FROM top5000 WHERE ?',
-        { song: answer.song },
-        (err, res) => {
-          if (res[0]) {
-            console.log(
-              `Position: ${res[0].position} || Song: ${res[0].song} || Artist: ${res[0].artist} || Year: ${res[0].year}`
-            );
-          } else {
-            console.error(`No results for ${answer.song}`);
-          }
-          runSearch();
-        }
-      );
-    });
-};
-
-const songAndAlbumSearch = () => {
-  inquirer
-    .prompt({
-      name: 'artist',
-      type: 'input',
-      message: 'What artist would you like to search for?',
-    })
-    .then((answer) => {
-      let query =
-        'SELECT top_albums.year, top_albums.album, top_albums.position, top5000.song, top5000.artist ';
-      query +=
-        'FROM top_albums INNER JOIN top5000 ON (top_albums.artist = top5000.artist AND top_albums.year ';
-      query +=
-        '= top5000.year) WHERE (top_albums.artist = ? AND top5000.artist = ?) ORDER BY top_albums.year, top_albums.position';
-
-      connection.query(query, [answer.artist, answer.artist], (err, res) => {
-        console.log(`${res.length} matches found!`);
-        res.forEach(({ year, position, artist, song, album }, i) => {
-          const num = i + 1;
-          console.log(
-            `${num} Year: ${year} Position: ${position} || Artist: ${artist} || Song: ${song} || Album: ${album}`
-          );
-        });
-
-        runSearch();
-      });
-    });
 };
