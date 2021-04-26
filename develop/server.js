@@ -351,10 +351,10 @@ const deleteItem = () => {
               ]).then((answer) => {
               console.log('Deleting department...');
               const query = connection.query(
-                "DELETE FROM department WHERE name = ?",
+                "DELETE FROM department WHERE id = ?",
                 [
                   {
-                    department_id: answer.departmentDelete,
+                    id: answer.departmentDelete,
                   },
                 ],
                 (err, res) => {
@@ -379,10 +379,10 @@ const deleteItem = () => {
               ]).then((answer) => {
               console.log('Deleting role...');
               const query = connection.query(
-                'DELETE FROM role WHERE title = ?',
+                'DELETE FROM role WHERE id = ?',
                 [
                   {
-                    role_id: answer.roleDelete,
+                    id: answer.roleDelete,
                   },
                 ],
                 (err, res) => {
