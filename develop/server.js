@@ -351,7 +351,7 @@ const deleteItem = () => {
               ]).then((answer) => {
               console.log('Deleting department...');
               const query = connection.query(
-                "DELETE FROM departments WHERE name = ?",
+                "DELETE FROM department WHERE name = ?",
                 [
                   {
                     department_id: answer.departmentDelete,
@@ -379,7 +379,7 @@ const deleteItem = () => {
               ]).then((answer) => {
               console.log('Deleting role...');
               const query = connection.query(
-                'DELETE FROM roles WHERE title = ?',
+                'DELETE FROM role WHERE title = ?',
                 [
                   {
                     role_id: answer.roleDelete,
@@ -400,17 +400,17 @@ const deleteEmployee = () => {
   .prompt(
             [
               {
-                name: 'employeeID',
+                name: 'employeeDelete',
                 input: 'input',
                 message: "Enter ID number of employee you want to delete."
               },
             ]).then((answer) => {
             console.log('Deleting employee...');
             const query = connection.query(
-              'DELETE FROM employees WHERE id = ?',
+              'DELETE FROM employee WHERE id = ?',
               [
                 {
-                  id: answer.employeeID,
+                  id: answer.employeeDelete,
                 },
               ],
               (err, res) => {
