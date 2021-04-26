@@ -236,32 +236,32 @@ const viewItem = () => {
     });
 };
 
-const viewDepartment = () => {
-  console.log("Quering Data...")
-  connection.query('SELECT * FROM department', (err, res) => {
-    if (err) throw err;
-    console.table(res);
-  })
-  viewItem();
-};
+        const viewDepartment = () => {
+          console.log("Quering Data...")
+          connection.query('SELECT * FROM department', (err, res) => {
+            if (err) throw err;
+            console.table(res);
+          })
+          viewItem();
+        };
 
-const viewRole = () => {
-  console.log("Quering Data....")
-  connection.query('SELECT * FROM role', (err, res) => {
-    if (err) throw err;
-    console.table(res);
-  })
-  viewItem();
-};
+        const viewRole = () => {
+          console.log("Quering Data....")
+          connection.query('SELECT * FROM role', (err, res) => {
+            if (err) throw err;
+            console.table(res);
+          })
+          viewItem();
+        };
 
-const viewEmployee = () => {
-  console.log("Quering Data...")
-  connection.query('SELECT * FROM employee', (err, res) => {
-    if (err) throw err;
-    console.table(res);
-  })
-  viewItem();
-};
+        const viewEmployee = () => {
+          console.log("Quering Data...")
+          connection.query('SELECT * FROM employee', (err, res) => {
+            if (err) throw err;
+            console.table(res);
+          })
+          viewItem();
+        };
 
 
 const updateEmployee = () => {
