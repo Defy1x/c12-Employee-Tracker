@@ -308,17 +308,12 @@ const deleteItem = () => {
                 {
                   name: 'departmentDelete',
                   input: 'input',
-                  message: "Enter ID of department you want to delete."
+                  message: "Enter name of department you want to delete."
                 },
               ]).then((answer) => {
               console.log('Deleting department...');
               const query = connection.query(
-                "DELETE FROM department WHERE id = ?",
-                [
-                  {
-                    id: answer.departmentDelete,
-                  },
-                ],
+                `DELETE FROM department WHERE name = '${answer.departmentDelete}'`,
                 (err, res) => {
                   if (err) throw err;
                   console.log("Success! Department has been removed.");
@@ -336,17 +331,12 @@ const deleteItem = () => {
                 {
                   name: 'roleDelete',
                   input: 'input',
-                  message: "Enter ID of role you want to delete."
+                  message: "Enter title of the role you want to delete."
                 },
               ]).then((answer) => {
               console.log('Deleting role...');
               const query = connection.query(
-                'DELETE FROM role WHERE id = ?',
-                [
-                  {
-                    id: answer.roleDelete,
-                  },
-                ],
+                `DELETE FROM role WHERE title = '${answer.roleDelete}'`,
                 (err, res) => {
                   if (err) throw err;
                   console.log("Success! Role has been removed.");
@@ -364,17 +354,12 @@ const deleteEmployee = () => {
               {
                 name: 'employeeDelete',
                 input: 'input',
-                message: "Enter ID number of employee you want to delete."
+                message: "Enter the first name of the Employee you want to delete."
               },
             ]).then((answer) => {
             console.log('Deleting employee...');
             const query = connection.query(
-              'DELETE FROM employee WHERE id = ?',
-              [
-                {
-                  id: answer.employeeDelete,
-                },
-              ],
+              `DELETE FROM employee WHERE first_name = '${answer.employeeDelete}'`,
               (err, res) => {
                 if (err) throw err;
                 console.log("Success! Employee has been removed.");
